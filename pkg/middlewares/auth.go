@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"test/v2/auth"
+	"test/v2/pkg/auth"
 
 	"github.com/gin-gonic/gin"
 )

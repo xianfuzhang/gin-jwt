@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"net/http"
-	"test/v2/auth"
-	"test/v2/models"
+	"test/v2/pkg/auth"
+	"test/v2/pkg/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +12,16 @@ type TokenRequest struct {
 	Password string `json:"password"`
 }
 
+// Token godoc
+// @Summary      Generate token
+// @Description  create a new token by user
+// @Tags         Token
+// @Accept       json
+// @Produce      json
+// @Param        name body string true "Username"
+// @Param        password body string true "Password"
+// @Success      200 {string} token ""
+// @Router       /token [post]
 func GenerateToken(context *gin.Context) {
 	var request TokenRequest
 	var user models.User

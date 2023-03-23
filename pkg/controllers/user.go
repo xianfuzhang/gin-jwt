@@ -2,11 +2,20 @@ package controllers
 
 import (
 	"net/http"
-	"test/v2/models"
+	"test/v2/pkg/models"
 
 	"github.com/gin-gonic/gin"
 )
 
+// RegisterUser godoc
+// @Summary      Register user account
+// @Description  create user account
+// @Tags         User Account
+// @Accept       json
+// @Produce      json
+// @Param        user body models.User true "user name and password"
+// @Success      201 {string}  username ""
+// @Router       /user/register [post]
 func RegisterUser(context *gin.Context) {
 	var user models.User
 	if err := context.ShouldBindJSON(&user); err != nil {
