@@ -18,9 +18,8 @@ type TokenRequest struct {
 // @Tags         Token
 // @Accept       json
 // @Produce      json
-// @Param        name body string true "Username"
-// @Param        password body string true "Password"
-// @Success      200 {string} token ""
+// @Param        Token body models.User true "user name and password"
+// @Success      201
 // @Router       /token [post]
 func GenerateToken(context *gin.Context) {
 	var request TokenRequest
@@ -30,8 +29,8 @@ func GenerateToken(context *gin.Context) {
 		context.Abort()
 		return
 	}
-
 	user.HashPassword(request.Password)
+
 	// check if email exists and password is correct
 	// record := database.Instance.Where("email = ?", request.Email).First(&user)
 	// if record.Error != nil {

@@ -1,0 +1,56 @@
+basePath: /api
+definitions:
+  models.User:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /token:
+    post:
+      consumes:
+      - application/json
+      description: create a new token by user
+      parameters:
+      - description: user name and password
+        in: body
+        name: Token
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Generate token
+      tags:
+      - Token
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: create user account
+      parameters:
+      - description: user name and password
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Register user account
+      tags:
+      - User Account
+swagger: "2.0"

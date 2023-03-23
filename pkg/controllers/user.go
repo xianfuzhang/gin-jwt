@@ -13,8 +13,8 @@ import (
 // @Tags         User Account
 // @Accept       json
 // @Produce      json
-// @Param        user body models.User true "user name and password"
-// @Success      201 {string}  username ""
+// @Param        User body models.User true "user name and password"
+// @Success      201
 // @Router       /user/register [post]
 func RegisterUser(context *gin.Context) {
 	var user models.User
