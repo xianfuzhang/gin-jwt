@@ -1,9 +1,10 @@
 package main
 
 import (
-	"test/v2/pkg/controllers"
-	"test/v2/pkg/middlewares"
-	"test/v2/pkg/sql"
+	"fmt"
+	"test/v2/internal/controllers"
+	sql "test/v2/internal/lib"
+	"test/v2/internal/middlewares"
 
 	_ "test/v2/docs"
 
@@ -17,7 +18,12 @@ import (
 // @host      localhost:8080
 // @BasePath  /api
 func main() {
-	sql.PgPoolInit()
+	pool, err := sql.PgPoolInit()
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer pool.Close()
+
 	router := initRouter()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8080")

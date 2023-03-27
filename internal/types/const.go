@@ -10,5 +10,5 @@ const (
 	DB_password = "123456"
 	DB_name     = "postgres"
 	DB_max_conn = 10
-	DB_timeout  = 10 * time.Second
+	DB_timeout  = 1 * time.Nanosecond
 )
