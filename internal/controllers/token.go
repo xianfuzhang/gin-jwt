@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"net/http"
-	"test/v2/internal/auth"
 	"test/v2/internal/models"
+	auth "test/v2/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )

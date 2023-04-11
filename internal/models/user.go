@@ -1,10 +1,16 @@
 package models
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+)
 
 type User struct {
 	Name     string `json:"name"`
 	Password string `json:"password"`
+}
+
+func (user *User) RegisterRouter() {
+
 }
 
 func (user *User) HashPassword(password string) error {
