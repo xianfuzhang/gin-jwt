@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -24,7 +25,11 @@ func GenerateJWT(username string) (tokenString string, err error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err = token.SignedString(jwtKey)
-	return
+	if err != nil {
+		return "", fmt.Errorf("generating JWT Token failed: %w", err)
+	}
+
+	return tokenString, nil
 }
 func ValidateToken(signedToken string) (err error) {
 	token, err := jwt.ParseWithClaims(
