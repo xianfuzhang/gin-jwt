@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 	"test/v2/internal/models"
-	auth "test/v2/internal/utils"
+	"test/v2/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +29,7 @@ func GenerateToken(context *gin.Context) {
 		context.Abort()
 		return
 	}
-	user.HashPassword(request.Password)
+	utils.HashPassword(request.Password)
 
 	// check if email exists and password is correct
 	// record := database.Instance.Where("email = ?", request.Email).First(&user)
@@ -39,13 +39,13 @@ func GenerateToken(context *gin.Context) {
 	// 	return
 	// }
 
-	credentialError := user.CheckPassword(request.Password)
+	credentialError := utils.CheckPassword(user.Password, request.Password)
 	if credentialError != nil {
 		context.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 		context.Abort()
 		return
 	}
-	tokenString, err := auth.GenerateJWT(user.Name)
+	tokenString, err := utils.GenerateJWT(user.Name)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		context.Abort()

@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"test/v2/internal/models"
+	"test/v2/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +24,7 @@ func RegisterUser(context *gin.Context) {
 		context.Abort()
 		return
 	}
-	if err := user.HashPassword(user.Password); err != nil {
+	if _, err := utils.HashPassword(user.Password); err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		context.Abort()
 		return
