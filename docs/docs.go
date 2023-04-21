@@ -36,7 +36,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/entities.User"
                         }
                     }
                 ],
@@ -47,7 +47,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/register": {
+        "/users": {
             "post": {
                 "description": "create user account",
                 "consumes": [
@@ -59,7 +59,7 @@ const docTemplate = `{
                 "tags": [
                     "User Account"
                 ],
-                "summary": "Register user account",
+                "summary": "Create user account",
                 "parameters": [
                     {
                         "description": "user name and password",
@@ -67,7 +67,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/entities.User"
                         }
                     }
                 ],
@@ -80,9 +80,12 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.User": {
+        "entities.User": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -100,7 +103,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "Swagger Example API",
+	Title:            "GIN JWT API",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

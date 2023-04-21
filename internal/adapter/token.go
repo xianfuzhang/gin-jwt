@@ -1,8 +1,8 @@
-package controllers
+package adapter
 
 import (
 	"net/http"
-	"test/v2/internal/models"
+	"test/v2/internal/entities"
 	"test/v2/internal/utils"
 
 	"github.com/gin-gonic/gin"
@@ -18,12 +18,12 @@ type TokenRequest struct {
 // @Tags         Token
 // @Accept       json
 // @Produce      json
-// @Param        Token body models.User true "user name and password"
+// @Param        Token body entities.User true "user name and password"
 // @Success      201
 // @Router       /token [post]
 func GenerateToken(context *gin.Context) {
 	var request TokenRequest
-	var user models.User
+	var user entities.User
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		context.Abort()

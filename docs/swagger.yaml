@@ -1,7 +1,9 @@
 basePath: /api
 definitions:
-  models.User:
+  entities.User:
     properties:
+      id:
+        type: integer
       name:
         type: string
       password:
@@ -10,7 +12,7 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  title: Swagger Example API
+  title: GIN JWT API
   version: "1.0"
 paths:
   /token:
@@ -24,7 +26,7 @@ paths:
         name: Token
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/entities.User'
       produces:
       - application/json
       responses:
@@ -33,7 +35,7 @@ paths:
       summary: Generate token
       tags:
       - Token
-  /user/register:
+  /users:
     post:
       consumes:
       - application/json
@@ -44,13 +46,13 @@ paths:
         name: User
         required: true
         schema:
-          $ref: '#/definitions/models.User'
+          $ref: '#/definitions/entities.User'
       produces:
       - application/json
       responses:
         "201":
           description: Created
-      summary: Register user account
+      summary: Create user account
       tags:
       - User Account
 swagger: "2.0"

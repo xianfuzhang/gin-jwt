@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Swagger Example API",
+        "title": "GIN JWT API",
         "contact": {},
         "version": "1.0"
     },
@@ -28,7 +28,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/entities.User"
                         }
                     }
                 ],
@@ -39,7 +39,7 @@
                 }
             }
         },
-        "/user/register": {
+        "/users": {
             "post": {
                 "description": "create user account",
                 "consumes": [
@@ -51,7 +51,7 @@
                 "tags": [
                     "User Account"
                 ],
-                "summary": "Register user account",
+                "summary": "Create user account",
                 "parameters": [
                     {
                         "description": "user name and password",
@@ -59,7 +59,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/entities.User"
                         }
                     }
                 ],
@@ -72,9 +72,12 @@
         }
     },
     "definitions": {
-        "models.User": {
+        "entities.User": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
