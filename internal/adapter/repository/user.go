@@ -4,7 +4,6 @@ import (
 	"test/v2/internal/adapter/sqlite"
 	"test/v2/internal/adapter/sqlite/models"
 	"test/v2/internal/entities"
-	"test/v2/internal/utils"
 )
 
 type User struct {
@@ -16,14 +15,18 @@ func (u *User) Create(user *entities.User) error {
 		Name:     user.Name,
 		Password: user.Password,
 	}
-	result := sqlite.DB.Create(&model)
-	return utils.HandleError(result)
+	if err := sqlite.DB.Create(&model).Error; err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 // Delete implements entities.UserRepository
 func (u *User) Delete(userId int64) error {
-	result := sqlite.DB.Delete(&entities.User{}, userId)
-	return utils.HandleError(result)
+	if err := sqlite.DB.Delete(&entities.User{}, userId).Error; err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 // Fetch implements entities.UserRepository
@@ -34,17 +37,18 @@ func (u *User) Fetch(num int64) ([]entities.User, error) {
 // GetById implements entities.UserRepository
 func (u *User) GetById(userId int64) entities.User {
 	var user entities.User
-	result := sqlite.DB.First(&user, userId)
-	if result.Error != nil {
-		panic(result.Error)
+	if err := sqlite.DB.First(&user, userId).Error; err != nil {
+		panic(err)
 	}
 	return user
 }
 
 // Update implements entities.UserRepository
 func (u *User) Update(user *entities.User) error {
-	result := sqlite.DB.Save(&user)
-	return utils.HandleError(result)
+	if err := sqlite.DB.Save(&user).Error; err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 var _ entities.UserRepository = &User{}
