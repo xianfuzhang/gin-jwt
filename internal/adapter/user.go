@@ -14,36 +14,16 @@ func LoadUserRouter(r *gin.RouterGroup) {
 	r.POST("users", CreateUser)
 }
 
-// func RegisterUser(context *gin.Context) {
-// 	var user entities.User
-// 	if err := context.ShouldBindJSON(&user); err != nil {
-// 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		context.Abort()
-// 		return
-// 	}
-// 	if _, err := utils.HashPassword(user.Password); err != nil {
-// 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		context.Abort()
-// 		return
-// 	}
-// 	record := database.Instance.Create(&user)
-// 	if record.Error != nil {
-// 		context.JSON(http.StatusInternalServerError, gin.H{"error": record.Error.Error()})
-// 		context.Abort()
-// 		return
-// 	}
-// 	context.JSON(http.StatusCreated, gin.H{"username": user.Name})
-// }
-
 // CreateUser godoc
 // @Summary      Create user account
 // @Description  create user account
 // @Tags         User Account
 // @Accept       json
 // @Produce      json
+// @Security     Bearer
 // @Param        User body entities.User true "user name and password"
 // @Success      201
-// @Router       /users [post]
+// @Router       /v1/users [post]
 func CreateUser(ctx *gin.Context) {
 	repoUser := &repository.User{}
 	var (
