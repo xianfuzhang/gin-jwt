@@ -2,8 +2,6 @@ basePath: /api
 definitions:
   entities.User:
     properties:
-      id:
-        type: integer
       name:
         type: string
       password:
@@ -12,14 +10,14 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  title: GIN JWT API
+  title: REST API base on Clean Arch
   version: "1.0"
 paths:
-  /token:
+  /login:
     post:
       consumes:
       - application/json
-      description: create a new token by user
+      description: get a new token by login
       parameters:
       - description: user name and password
         in: body
@@ -32,10 +30,10 @@ paths:
       responses:
         "201":
           description: Created
-      summary: Generate token
+      summary: User authorization and generate token
       tags:
       - Token
-  /users:
+  /v1/users:
     post:
       consumes:
       - application/json
@@ -52,7 +50,15 @@ paths:
       responses:
         "201":
           description: Created
+      security:
+      - Bearer: []
       summary: Create user account
       tags:
       - User Account
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
