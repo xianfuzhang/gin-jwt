@@ -1,11 +1,10 @@
 package main
 
 import (
-	// "test/v2/internal/controllers"
-
 	_ "test/v2/docs"
 	"test/v2/internal/adapter"
 	"test/v2/internal/adapter/sqlite"
+	"test/v2/internal/middlewares"
 
 	"github.com/gin-gonic/gin"
 
@@ -13,10 +12,14 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title           GIN JWT API
+// @title           REST API base on Clean Arch.
 // @version         1.0
 // @host      localhost:8080
 // @BasePath  /api
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
 func main() {
 	sqlite.ConnDB()
 	router := setupRouter()
@@ -27,11 +30,11 @@ func main() {
 func setupRouter() *gin.Engine {
 	router := gin.Default()
 	api := router.Group("/api")
-	adapter.LoadUserRouter(api)
-	// api.POST("/user/register", controllers.RegisterUser)
-	// api.POST("/token", controllers.GenerateToken)
+	adapter.LoadLoginRouter(api)
 
-	// v1 := api.Group("/v1").Use(middlewares.Auth())
+	v1 := api.Group("/v1")
+	v1.Use(middlewares.Auth())
+	adapter.LoadUserRouter(v1)
 
 	return router
 }
