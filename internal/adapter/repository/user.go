@@ -9,6 +9,15 @@ import (
 type User struct {
 }
 
+// GetByName implements entities.UserRepository
+func (*User) GetByName(name string) (entities.User, error) {
+	var user = entities.User{Name: name}
+	if err := sqlite.DB.First(&user).Error; err != nil {
+		panic(err)
+	}
+	return user, nil
+}
+
 // Create implements entities.UserRepository
 func (u *User) Create(user *entities.User) error {
 	model := models.User{
@@ -35,12 +44,12 @@ func (u *User) Fetch(num int64) ([]entities.User, error) {
 }
 
 // GetById implements entities.UserRepository
-func (u *User) GetById(userId int64) entities.User {
+func (u *User) GetById(userId int64) (entities.User, error) {
 	var user entities.User
 	if err := sqlite.DB.First(&user, userId).Error; err != nil {
 		panic(err)
 	}
-	return user
+	return user, nil
 }
 
 // Update implements entities.UserRepository
