@@ -11,4 +11,6 @@ const (
 	DB_name     = "postgres"
 	DB_max_conn = 10
 	DB_timeout  = 1 * time.Nanosecond
+
+	UserResetPwd = "123456"
 )

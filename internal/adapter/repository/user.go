@@ -9,16 +9,6 @@ import (
 type User struct {
 }
 
-// ChangePassword implements entities.UserRepository
-func (*User) ChangePassword(user *entities.User, newPassword string) error {
-	panic("unimplemented")
-}
-
-// ResetPassword implements entities.UserRepository
-func (*User) ResetPassword(user *entities.User) error {
-	panic("unimplemented")
-}
-
 // GetByName implements entities.UserRepository
 func (*User) GetByName(name string) (entities.User, error) {
 	var user = entities.User{}
@@ -65,6 +55,13 @@ func (u *User) GetById(userId int64) (entities.User, error) {
 // Update implements entities.UserRepository
 func (u *User) Update(user *entities.User) error {
 	if err := sqlite.DB.Save(&user).Error; err != nil {
+		panic(err)
+	}
+	return nil
+}
+
+func (u *User) UpdateUserPassword(user *entities.User) error {
+	if err := sqlite.DB.Model(&entities.User{}).Where("name = ?", user.Name).Update("password", user.Password).Error; err != nil {
 		panic(err)
 	}
 	return nil

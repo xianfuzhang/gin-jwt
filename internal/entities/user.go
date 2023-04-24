@@ -12,4 +12,6 @@ type UserRepository interface {
 	GetById(userId int64) (User, error)
 	GetByName(name string) (User, error)
 	Fetch(num int64) ([]User, error)
+
+	UpdateUserPassword(user *User) error
 }

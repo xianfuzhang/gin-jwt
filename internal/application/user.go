@@ -11,3 +11,7 @@ func CreateUser(userRepo entities.UserRepository, user *entities.User) error {
 func GetUserByName(userRepo entities.UserRepository, userName string) (entities.User, error) {
 	return userRepo.GetByName(userName)
 }
+
+func UpdateUserPassword(userRepo entities.UserRepository, user *entities.User) error {
+	return userRepo.UpdateUserPassword(user)
+}
