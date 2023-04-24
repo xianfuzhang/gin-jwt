@@ -9,10 +9,20 @@ import (
 type User struct {
 }
 
+// ChangePassword implements entities.UserRepository
+func (*User) ChangePassword(user *entities.User, newPassword string) error {
+	panic("unimplemented")
+}
+
+// ResetPassword implements entities.UserRepository
+func (*User) ResetPassword(user *entities.User) error {
+	panic("unimplemented")
+}
+
 // GetByName implements entities.UserRepository
 func (*User) GetByName(name string) (entities.User, error) {
-	var user = entities.User{Name: name}
-	if err := sqlite.DB.First(&user).Error; err != nil {
+	var user = entities.User{}
+	if err := sqlite.DB.Where("name=?", name).First(&user).Error; err != nil {
 		panic(err)
 	}
 	return user, nil
