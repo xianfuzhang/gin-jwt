@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"net/http"
+	"strconv"
 	"test/v2/internal/adapter/repository"
 	"test/v2/internal/application"
 	"test/v2/internal/entities"
@@ -14,8 +15,9 @@ import (
 var repoUser = &repository.User{}
 
 func LoadUserRouter(r *gin.RouterGroup) {
-	r.POST("users", CreateUser)
-	r.PUT("users/:userName/reset", ResetPassword)
+	r.POST("users", createUser)
+	r.DELETE("users/:userId", deleteUser)
+	r.PUT("users/:userName/reset", resetPassword)
 }
 
 // CreateUser godoc
@@ -27,7 +29,7 @@ func LoadUserRouter(r *gin.RouterGroup) {
 // @Param        User body entities.User true "user name and password"
 // @Success      201
 // @Router       /v1/users [post]
-func CreateUser(ctx *gin.Context) {
+func createUser(ctx *gin.Context) {
 	var (
 		user    entities.User
 		exist   entities.User
@@ -67,7 +69,7 @@ func CreateUser(ctx *gin.Context) {
 // @Param 		 user_name path string true "User Name"
 // @Success      204
 // @Router       /v1/users/{user_name}/reset [put]
-func ResetPassword(ctx *gin.Context) {
+func resetPassword(ctx *gin.Context) {
 	var (
 		user    entities.User
 		hashPwd string
@@ -84,8 +86,30 @@ func ResetPassword(ctx *gin.Context) {
 		return
 	}
 	user.Password = hashPwd
-	err = application.UpdateUserPassword(repoUser, &user)
+	if err = application.UpdateUserPassword(repoUser, &user); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+	ctx.JSON(http.StatusNoContent, gin.H{})
+}
+
+// @Summary      Delete user
+// @Tags         User Account
+// @Accept       json
+// @Produce      json
+// @Security     Bearer
+// @Param 		 user_id path integer true "User ID"
+// @Success      204
+// @Router       /v1/users/{user_id} [delete]
+func deleteUser(ctx *gin.Context) {
+	userId, err := strconv.ParseInt(ctx.Param("userId"), 10, 32)
 	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+	if err := application.DeleteUser(repoUser, int32(userId)); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
 		return

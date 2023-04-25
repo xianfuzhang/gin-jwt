@@ -35,8 +35,8 @@ func (u *User) Create(user *entities.User) error {
 }
 
 // Delete implements entities.UserRepository
-func (u *User) Delete(userId int64) error {
-	if err := sqlite.DB.Delete(&entities.User{}, userId).Error; err != nil {
+func (u *User) Delete(userId int32) error {
+	if err := sqlite.DB.Unscoped().Delete(&models.User{}, userId).Error; err != nil {
 		return err
 	}
 	return nil
@@ -48,7 +48,7 @@ func (u *User) Fetch(num int64) ([]entities.User, error) {
 }
 
 // GetById implements entities.UserRepository
-func (u *User) GetById(userId int64) (entities.User, error) {
+func (u *User) GetById(userId int32) (entities.User, error) {
 	var user entities.User
 	err := sqlite.DB.First(&user, userId).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {

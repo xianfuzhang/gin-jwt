@@ -15,3 +15,7 @@ func GetUserByName(userRepo entities.UserRepository, userName string) (entities.
 func UpdateUserPassword(userRepo entities.UserRepository, user *entities.User) error {
 	return userRepo.UpdateUserPassword(user)
 }
+
+func DeleteUser(userRepo entities.UserRepository, userId int32) error {
+	return userRepo.Delete(userId)
+}
