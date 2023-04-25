@@ -1,4 +1,4 @@
-package application
+package service
 
 import (
 	"test/v2/internal/entities"

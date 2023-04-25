@@ -3,8 +3,8 @@ package adapter
 import (
 	"net/http"
 	"test/v2/internal/adapter/repository"
-	"test/v2/internal/application"
 	"test/v2/internal/entities"
+	"test/v2/internal/service"
 	"test/v2/internal/utils"
 
 	"github.com/gin-gonic/gin"
@@ -31,7 +31,7 @@ func DoLogin(ctx *gin.Context) {
 		ctx.Abort()
 	}
 
-	dbuser, err := application.GetUserByName(repoUser, user.Name)
+	dbuser, err := service.GetUserByName(repoUser, user.Name)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		ctx.Abort()

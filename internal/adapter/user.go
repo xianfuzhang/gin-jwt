@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strconv"
 	"test/v2/internal/adapter/repository"
-	"test/v2/internal/application"
 	"test/v2/internal/entities"
+	"test/v2/internal/service"
 	"test/v2/internal/types"
 	"test/v2/internal/utils"
 
@@ -41,7 +41,7 @@ func createUser(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
-	if exist, _ = application.GetUserByName(repoUser, user.Name); exist.Name != "" {
+	if exist, _ = service.GetUserByName(repoUser, user.Name); exist.Name != "" {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "user name exists"})
 		ctx.Abort()
 		return
@@ -52,7 +52,7 @@ func createUser(ctx *gin.Context) {
 		return
 	}
 	user.Password = hashPwd
-	err = application.CreateUser(repoUser, &user)
+	err = service.CreateUser(repoUser, &user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
@@ -75,7 +75,7 @@ func resetPassword(ctx *gin.Context) {
 		hashPwd string
 		err     error
 	)
-	if user, err = application.GetUserByName(repoUser, ctx.Param("userName")); err != nil {
+	if user, err = service.GetUserByName(repoUser, ctx.Param("userName")); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
 		return
@@ -86,7 +86,7 @@ func resetPassword(ctx *gin.Context) {
 		return
 	}
 	user.Password = hashPwd
-	if err = application.UpdateUserPassword(repoUser, &user); err != nil {
+	if err = service.UpdateUserPassword(repoUser, &user); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
 		return
@@ -109,7 +109,7 @@ func deleteUser(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
-	if err := application.DeleteUser(repoUser, int32(userId)); err != nil {
+	if err := service.DeleteUser(repoUser, int32(userId)); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
 		return
