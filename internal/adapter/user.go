@@ -30,6 +30,7 @@ func LoadUserRouter(r *gin.RouterGroup) {
 func CreateUser(ctx *gin.Context) {
 	var (
 		user    entities.User
+		exist   entities.User
 		hashPwd string
 		err     error
 	)
@@ -38,7 +39,12 @@ func CreateUser(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
-	if hashPwd, err = utils.HashPassword(user.Password); err != nil {
+	if exist, _ = application.GetUserByName(repoUser, user.Name); exist.Name != "" {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "user name exists"})
+		ctx.Abort()
+		return
+	}
+	if hashPwd, err = hashPassword(user.Password); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
 		return
