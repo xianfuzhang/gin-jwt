@@ -16,11 +16,48 @@ var repoUser = &repository.User{}
 
 func LoadUserRouter(r *gin.RouterGroup) {
 	r.POST("users", createUser)
+	r.GET("users", getUsers)
 	r.DELETE("users/:userId", deleteUser)
 	r.PUT("users/:userName/reset", resetPassword)
 }
 
-// CreateUser godoc
+// @Summary      Get user list
+// @Tags         User Account
+// @Accept       json
+// @Produce      json
+// @Security     Bearer
+// @Param        limit  query integer true "Limit" default(10)
+// @Param        offset query integer true "Offset" default(0)
+// @Success      200 {array} entities.User
+// @Router       /v1/users [get]
+func getUsers(ctx *gin.Context) {
+	var (
+		users  []entities.User
+		err    error
+		limit  int64
+		offset int64
+	)
+	limit, err = strconv.ParseInt(ctx.Query("limit"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+	offset, err = strconv.ParseInt(ctx.Query("offset"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+	users, err = service.FetchUsers(repoUser, limit, offset)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.Abort()
+		return
+	}
+	ctx.JSON(http.StatusOK, users)
+}
+
 // @Summary      Create user account
 // @Tags         User Account
 // @Accept       json
@@ -109,7 +146,7 @@ func deleteUser(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
-	if err := service.DeleteUser(repoUser, int32(userId)); err != nil {
+	if err := service.DeleteUser(repoUser, userId); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
 		return

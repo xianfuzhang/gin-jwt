@@ -16,6 +16,10 @@ func UpdateUserPassword(userRepo entities.UserRepository, user *entities.User) e
 	return userRepo.UpdateUserPassword(user)
 }
 
-func DeleteUser(userRepo entities.UserRepository, userId int32) error {
+func DeleteUser(userRepo entities.UserRepository, userId int64) error {
 	return userRepo.Delete(userId)
+}
+
+func FetchUsers(userRepo entities.UserRepository, limit, offset int64) ([]entities.User, error) {
+	return userRepo.Fetch(limit, offset)
 }

@@ -1,6 +1,7 @@
 package entities
 
 type User struct {
+	ID       uint32
 	Name     string
 	Password string
 }
@@ -8,10 +9,10 @@ type User struct {
 type UserRepository interface {
 	Create(user *User) error
 	Update(user *User) error
-	Delete(userId int32) error
+	Delete(userId int64) error
 	GetById(userId int32) (User, error)
 	GetByName(name string) (User, error)
-	Fetch(num int64) ([]User, error)
+	Fetch(limit, offset int64) ([]User, error)
 
 	UpdateUserPassword(user *User) error
 }

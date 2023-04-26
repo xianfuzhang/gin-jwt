@@ -35,7 +35,7 @@ func (u *User) Create(user *entities.User) error {
 }
 
 // Delete implements entities.UserRepository
-func (u *User) Delete(userId int32) error {
+func (u *User) Delete(userId int64) error {
 	if err := sqlite.DB.Unscoped().Delete(&models.User{}, userId).Error; err != nil {
 		return err
 	}
@@ -43,8 +43,13 @@ func (u *User) Delete(userId int32) error {
 }
 
 // Fetch implements entities.UserRepository
-func (u *User) Fetch(num int64) ([]entities.User, error) {
-	panic("unimplemented")
+func (u *User) Fetch(limit, offset int64) ([]entities.User, error) {
+	var users []entities.User
+	err := sqlite.DB.Limit(int(limit)).Offset(int(offset)).Find(&users).Error
+	if err != nil {
+		return users, err
+	}
+	return users, nil
 }
 
 // GetById implements entities.UserRepository
