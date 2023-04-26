@@ -28,11 +28,11 @@ func LoadUserRouter(r *gin.RouterGroup) {
 // @Security     Bearer
 // @Param        limit  query integer true "Limit" default(10)
 // @Param        offset query integer true "Offset" default(0)
-// @Success      200 {array} entities.User
+// @Success      200 {array} entities.UserResponse
 // @Router       /v1/users [get]
 func getUsers(ctx *gin.Context) {
 	var (
-		users  []entities.User
+		users  []entities.UserResponse
 		err    error
 		limit  int64
 		offset int64
@@ -69,7 +69,7 @@ func getUsers(ctx *gin.Context) {
 func createUser(ctx *gin.Context) {
 	var (
 		user    entities.User
-		exist   entities.User
+		exist   entities.UserResponse
 		hashPwd string
 		err     error
 	)
@@ -108,11 +108,13 @@ func createUser(ctx *gin.Context) {
 // @Router       /v1/users/{user_name}/reset [put]
 func resetPassword(ctx *gin.Context) {
 	var (
-		user    entities.User
-		hashPwd string
-		err     error
+		user     entities.User
+		userName string
+		hashPwd  string
+		err      error
 	)
-	if user, err = service.GetUserByName(repoUser, ctx.Param("userName")); err != nil {
+	userName = ctx.Param("userName")
+	if _, err = service.GetUserByName(repoUser, userName); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		ctx.Abort()
 		return
@@ -122,6 +124,7 @@ func resetPassword(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+	user.Name = userName
 	user.Password = hashPwd
 	if err = service.UpdateUserPassword(repoUser, &user); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

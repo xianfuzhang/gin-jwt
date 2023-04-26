@@ -8,7 +8,7 @@ func CreateUser(userRepo entities.UserRepository, user *entities.User) error {
 	return userRepo.Create(user)
 }
 
-func GetUserByName(userRepo entities.UserRepository, userName string) (entities.User, error) {
+func GetUserByName(userRepo entities.UserRepository, userName string) (entities.UserResponse, error) {
 	return userRepo.GetByName(userName)
 }
 
@@ -20,6 +20,6 @@ func DeleteUser(userRepo entities.UserRepository, userId int64) error {
 	return userRepo.Delete(userId)
 }
 
-func FetchUsers(userRepo entities.UserRepository, limit, offset int64) ([]entities.User, error) {
+func FetchUsers(userRepo entities.UserRepository, limit, offset int64) ([]entities.UserResponse, error) {
 	return userRepo.Fetch(limit, offset)
 }
