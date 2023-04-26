@@ -7,10 +7,21 @@ definitions:
       password:
         type: string
     type: object
+  entities.UserResponse:
+    properties:
+      createAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
-  title: REST API base on Clean Arch
+  title: REST API base on Clean Arch.
   version: "1.0"
 paths:
   /login:
@@ -34,10 +45,39 @@ paths:
       tags:
       - Token
   /v1/users:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 0
+        description: Offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.UserResponse'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get user list
+      tags:
+      - User Account
     post:
       consumes:
       - application/json
-      description: create user account
       parameters:
       - description: user name and password
         in: body
@@ -53,6 +93,46 @@ paths:
       security:
       - Bearer: []
       summary: Create user account
+      tags:
+      - User Account
+  /v1/users/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - Bearer: []
+      summary: Delete user
+      tags:
+      - User Account
+  /v1/users/{user_name}/reset:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Name
+        in: path
+        name: user_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      security:
+      - Bearer: []
+      summary: Reset user password
       tags:
       - User Account
 securityDefinitions:
