@@ -1,7 +1,7 @@
 package sqlite
 
 import (
-	"test/v2/internal/adapter/sqlite/models"
+	// "test/v2/internal/adapter/sqlite/models"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
@@ -14,6 +14,6 @@ func ConnDB() {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&models.User{})
+	// db.AutoMigrate(&models.User{})
 	DB = db
 }
