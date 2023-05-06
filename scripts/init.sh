@@ -12,7 +12,7 @@ function start_build() {
     pushd "${APP_ROOT}" >/dev/null
     mkdir -p "${APP_OUT}"
 
-    go build -v -o "${APP_OUT}" "./$1"
+    CGO_ENABLED=0 go build -v -o "${APP_OUT}" "./$1"
 
     popd >/dev/null
 }
